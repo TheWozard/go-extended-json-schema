@@ -1,5 +1,6 @@
 # go-extended-json-schema
-[![Test Status](https://github.com/TheWozard/go-extended-json-schema/actions/workflows/workflow.yml/badge.svg?branch=master)](https://github.com/TheWozard/go-extended-json-schema/actions/workflows/workflow.yml)
+[![Test](https://github.com/TheWozard/go-extended-json-schema/actions/workflows/test.yml/badge.svg)](https://github.com/TheWozard/go-extended-json-schema/actions/workflows/test.yml)
+[![Lint](https://github.com/TheWozard/go-extended-json-schema/actions/workflows/lint.yml/badge.svg)](https://github.com/TheWozard/go-extended-json-schema/actions/workflows/lint.yml)
 [![Coverage Status](https://coveralls.io/repos/github/TheWozard/go-extended-json-schema/badge.svg?branch=master)](https://coveralls.io/github/TheWozard/go-extended-json-schema?branch=master)
 
 An extension on [JSON Schema](https://json-schema.org/) with additional features related to providing higher levels of data governance in a schema, as well as supporting more dynamic discovery of intended schema when provided a document with unknown origins and schema.
