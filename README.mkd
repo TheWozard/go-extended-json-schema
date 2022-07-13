@@ -1,0 +1,13 @@
+# go-extended-json-schema
+[![Test Status](https://github.com/TheWozard/go-extended-json-schema/actions/workflows/workflow.yml/badge.svg?branch=master)](https://github.com/TheWozard/go-extended-json-schema/actions/workflows/workflow.yml)
+[![Coverage Status](https://coveralls.io/repos/github/TheWozard/go-extended-json-schema/badge.svg?branch=master)](https://coveralls.io/github/TheWozard/go-extended-json-schema?branch=master)
+
+An extension on [JSON Schema](https://json-schema.org/) with additional features related to providing higher levels of data governance in a schema, as well as supporting more dynamic discovery of intended schema when provided a document with unknown origins and schema.
+
+# Additions
+
+| Key | Type | Description |
+| - | - | - |
+| `$identity` | JSON Schema | The minimum viable schema for the overall schema to be considered a correct viable candidate for the provided document. This field only exists on the root document.
+| `$owner` | string | Defines the owner of the variable attached to and all children until another `$owner` is provided
+| `$priority` | string | Defines the priority of the variable attached to and all children until another `$priority` is provided
