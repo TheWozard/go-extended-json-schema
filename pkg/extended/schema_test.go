@@ -10,6 +10,19 @@ import (
 
 func TestSchemaValidate(t *testing.T) {
 
+	loadData := func(t *testing.T, root string, additional []string, data string) (map[string]interface{}, []map[string]interface{}, interface{}) {
+		loadedRoot := map[string]interface{}{}
+		require.NoError(t, json.Unmarshal([]byte(root), &loadedRoot))
+		loadedAdditional := make([]map[string]interface{}, len(additional))
+		for i, additionalSchema := range additional {
+			loadedAdditional[i] = map[string]interface{}{}
+			require.NoError(t, json.Unmarshal([]byte(additionalSchema), &loadedAdditional[i]))
+		}
+		var loadedData interface{}
+		require.NoError(t, json.Unmarshal([]byte(data), &loadedData))
+		return loadedRoot, loadedAdditional, loadedData
+	}
+
 	result := func(identity, schema bool, problems []extended.SchemaProblem) *extended.ValidateResult {
 		rtn := &extended.ValidateResult{
 			Identity: extended.SchemaResults{
@@ -77,29 +90,23 @@ func TestSchemaValidate(t *testing.T) {
 			additional: []string{
 				`{"$id":"identity","type":"array"}`,
 			},
-			data:    `{}`,
-			outcome: result(false, false, []extended.SchemaProblem{}),
+			data: `{}`,
+			outcome: result(false, false, []extended.SchemaProblem{
+				{Description: "Invalid type. Expected: array, given: object", Field: "(root)", Value: map[string]interface{}{}},
+			}),
 		},
 	}
 
 	for _, tC := range testCases {
 		t.Run(tC.desc, func(t *testing.T) {
 			// Load string json data into go native
-			root := map[string]interface{}{}
-			require.Nil(t, json.Unmarshal([]byte(tC.root), &root))
-			additional := make([]map[string]interface{}, len(tC.additional))
-			for i, additional_schema := range tC.additional {
-				additional[i] = map[string]interface{}{}
-				require.Nil(t, json.Unmarshal([]byte(additional_schema), &additional[i]))
-			}
-			var data interface{}
-			require.Nil(t, json.Unmarshal([]byte(tC.data), &data))
+			root, additional, data := loadData(t, tC.root, tC.additional, tC.data)
 
 			// Act
 			schema, err := extended.NewSchema(root, additional)
-			require.Nil(t, err)
+			require.NoError(t, err)
 			result, err := schema.Validate(data)
-			require.Nil(t, err)
+			require.NoError(t, err)
 
 			// Validate
 			require.Equal(t, tC.outcome, result)
