@@ -24,14 +24,20 @@ func NewSchema(rootSchema map[string]interface{}, additionalSchemas []map[string
 
 	if identitySchema, ok := rootSchema[IdentityKey]; ok {
 		identityLoader := gojsonschema.NewSchemaLoader()
-		identityLoader.AddSchemas(loadedAdditionalSchemas...)
+		err = identityLoader.AddSchemas(loadedAdditionalSchemas...)
+		if err != nil {
+			return nil, err
+		}
 		identity, err = identityLoader.Compile(gojsonschema.NewGoLoader(identitySchema))
 		if err != nil {
 			return nil, err
 		}
 	}
 	rootLoader := gojsonschema.NewSchemaLoader()
-	rootLoader.AddSchemas(loadedAdditionalSchemas...)
+	err = rootLoader.AddSchemas(loadedAdditionalSchemas...)
+	if err != nil {
+		return nil, err
+	}
 	root, err = rootLoader.Compile(gojsonschema.NewGoLoader(rootSchema))
 	if err != nil {
 		return nil, err
